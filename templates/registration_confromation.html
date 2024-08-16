@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container-xxl py-6 mt-5">
+    <div class="container mt-4"
+        style="max-width: 720px;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;padding: 20px; border-radius: 30px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="display-5 mb-3">Registration Completed</h1>
+            <p>Note Your ID</p>
+            <hr><br>
+            {% for message in messages %}
+
+            <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                <strong>Alert!</strong> {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <div class="text-center">
+
+                <h2>Hai {{member.first_name}}</h2>
+                <p>Please note your login ID</p>
+                <h1 class="display-2 text-primary">{{member.id_number}}</h1>
+                
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

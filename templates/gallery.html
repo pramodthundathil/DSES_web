@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+{% block content%}]
+<style>
+    #img-12{
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+</style>
+
+ <!-- Blog Start -->
+ <div class="container-xxl py-6">
+    <div class="container">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <h1 class="display-5 mb-3">Gallery</h1>
+            <p></p>
+        </div>
+        <div class="row g-4">
+
+            {% for item in gallery %}
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <img class="img-fluid" src="{{item.image.url}}" id="img-12" alt="">
+                <div class="bg-light p-4">
+                    <a class="d-block h5 lh-base mb-4" href="">{{item.image_caption}}</a>
+                    <div class="text-muted border-top pt-4">
+                        <!-- <small class="me-3"><i class="fa fa-user text-primary me-2"></i>Admin</small> -->
+                        <small class="me-3"><i class="fa fa-calendar text-primary me-2"></i>{{item.date}}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+<!-- Blog End -->
+
+
+{% endblock %}

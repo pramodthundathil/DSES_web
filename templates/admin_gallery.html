@@ -1,0 +1,190 @@
+{% extends 'admin.html' %}
+{% load static %}
+{% block content %}
+<div class="container-xxl py-6">
+    <div class="container">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="h3 mb-3">Gallery</h1>
+            <p></p>
+        </div>
+
+        <link rel="stylesheet" href="{%static 'dashboard/css/dataTables.bootstrap4.css' %}">
+
+
+        <!-- <p class="card-text">DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, built upon the foundations of progressive enhancement, that adds all of these advanced features to any HTML table. </p> -->
+        <div class="row my-4">
+            <div class="col-12">
+                <div class="row align-items-center my-4">
+                    <div class="col">
+                        <!-- <h2 class="h3 mb-0 page-title">Contacts</h2> -->
+                        {% for message in messages %}
+                        <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                            <strong>Alart</strong> {{message}} <button type="button" class="close" data-dismiss="alert"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-auto">
+
+                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+                            data-target="#defaultModal"><span class="fe fe-filter fe-12 mr-2"></span>Create Image</button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog"
+                            aria-labelledby="defaultModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="defaultModalLabel">Add Gallery</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+
+                                        <!-- product adding form inside model stats  -->
+
+                                        <form method="post" enctype="multipart/form-data" data-toggle="validator">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-group">
+                                                        <label>Image Caption *</label>
+                                                        <input type="text" name="caption" class="form-control"
+                                                            placeholder="Enter Name" data-errors="Please Enter Name."
+                                                            required>
+                                                        <div class="help-block with-errors"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-group">
+                                                        <label>Primary Image *</label>
+                                                        <input type="file" class="form-control image-file"
+                                                            name="image" accept="image/*" required>
+                                                    </div>
+                                                </div>
+                                                
+                                               
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mr-2">Add Gallery</button>
+                                            <button type="reset" class="btn btn-danger">Reset</button>
+                                        </form>
+
+                                        <!-- product adding form inside model end  -->
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Small table -->
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <!-- table -->
+                            <table class="table table-striped datatables" id="dataTable-1">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Image Caption</th>
+                                        <th>Image</th>
+                                        <th>date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in gallary %}
+                                    <tr>
+
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{item.image_caption}}</td>
+                                        <td><img src="{{item.image.url}}" width="100px" alt=""></td>
+                                        <td>{{item.date}}</td>
+                                      
+                                        
+                                        <td>
+                                            <!-- Button trigger modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+    delete
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-body">
+          Are you sure do you want to delete ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          <a href="{%url 'delete_gallery' item.id %}" class="btn btn-danger">delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+                                            <!-- <button class="btn btn-sm dropdown-toggle more-horizontal" type="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="text-muted sr-only">Action</span>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#">Edit</a>
+                                                <a class="dropdown-item" href="#">Remove</a>
+                                                <a class="dropdown-item" href="#">Assign</a>
+                                            </div> -->
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- simple table -->
+            </div> <!-- end section -->
+        </div> <!-- .col-12 -->
+    </div> <!-- .row -->
+</div> <!-- .container-fluid -->
+
+
+<script src="{%static 'dashboard/js/jquery.min.js' %}"></script>
+<script src="{%static 'dashboard/js/popper.min.js' %}' "></script>
+<script src="{%static 'dashboard/js/moment.min.js' %}"></script>
+<script src="{%static 'dashboard/js/bootstrap.min.js'%}"></script>
+<script src="{%static 'dashboard/js/simplebar.min.js' %}"></script>
+<script src="{%static 'dashboard/js/daterangepicker.js' %}"></script>
+<script src="{%static 'dashboard/js/jquery.stickOnScroll.js' %}"></script>
+<script src="{%static 'dashboard/js/tinycolor-min.js' %}"></script>
+<script src="{%static 'dashboard/js/config.js' %}"></script>
+
+<script src='{%static "dashboard/js/jquery.dataTables.min.js" %}'></script>
+<script src='{%static "dashboard/js/dataTables.bootstrap4.min.js" %}'></script>
+<script>
+    $('#dataTable-1').DataTable(
+        {
+            autoWidth: true,
+            "lengthMenu": [
+                [16, 32, 64, -1],
+                [16, 32, 64, "All"]
+            ]
+        });
+</script>
+
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-56159088-1');
+</script>
+
+
+
+{% endblock %}
