@@ -27,7 +27,7 @@
                 </div>
                 <hr class="text-primary">
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <h6>Personal details</h6>
@@ -77,22 +77,6 @@
                                 <label for="email">District</label>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <select class="form-control" required name="blood_group" id="blood_group">
-                                    <option value="" disabled selected>Select Blood Group</option>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                </select>
-                                <label for="blood_group">Blood Group</label>
-                            </div>
-                        </div>
                         
                         <div class="col-md-12">
                             <div class="form-floating">
@@ -119,8 +103,37 @@
                                 <label for="email">ID card Number</label>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-control" required name="blood_group" id="blood_group">
+                                    <option value="" disabled selected>Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                                <label for="blood_group">Blood Group</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="hidden" class="form-control" name="profile_pic" id="profilePic" accept="image/*">
+                                <!-- <label for="profilePic">Upload Profile Picture</label> -->
+                                <div>
+                                    <button type="button" id="uploadButton" class="btn btn-primary mb-3">Upload Profile Picture</button>
+                                    <video id="video" width="320" height="240" autoplay style="display:none;"></video><br>
+                                    <button id="capture" style="display:none;" class="btn btn-success mb-3">Capture Photo</button>
+                                    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                                    <img id="capturedImage" src="" alt="Captured Image" style="display:none;"><br>
+                                    <button id="recapture" style="display:none;" class="btn btn-warning">Recapture</button>
+                                </div>
+                            </div>
+                        </div>
                         
-        
                     </div>
                    
                     <h6 class="mt-5">Nominee Details</h6>
@@ -183,5 +196,58 @@
     </div>
 </div>
 <!-- Registration End -->
+<script>
+    document.getElementById('uploadButton').addEventListener('click', function() {
+    // Show the video element and capture button
+    document.getElementById('video').style.display = 'block';
+    document.getElementById('capture').style.display = 'block';
+    
+    // Access the camera and stream it to the video element
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            const video = document.getElementById('video');
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function(err) {
+            console.log("An error occurred: " + err);
+        });
+});
+
+// Capture the image when the "Capture Photo" button is clicked
+document.getElementById('capture').addEventListener('click', function() {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    
+    // Draw the current video frame onto the canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Convert the canvas image to a data URL and display it
+    const dataURL = canvas.toDataURL('image/png');
+    document.getElementById('capturedImage').src = dataURL;
+    document.getElementById('capturedImage').style.display = 'block';
+    
+    // Hide the video and capture button, show the recapture button
+    video.style.display = 'none';
+    document.getElementById('capture').style.display = 'none';
+    document.getElementById('recapture').style.display = 'block';
+    
+    // Set the hidden input value to the captured image data URL
+    document.getElementById('profilePic').value = dataURL;
+});
+
+// Allow recapturing the image when the "Recapture" button is clicked
+document.getElementById('recapture').addEventListener('click', function() {
+    // Show the video and capture button again
+    document.getElementById('video').style.display = 'block';
+    document.getElementById('capture').style.display = 'block';
+    
+    // Hide the captured image and recapture button
+    document.getElementById('capturedImage').style.display = 'none';
+    document.getElementById('recapture').style.display = 'none';
+});
+
+</script>
 
 {% endblock %}

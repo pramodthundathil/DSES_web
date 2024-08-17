@@ -14,6 +14,7 @@ urlpatterns = [
     path("Membersingleview/<int:pk>",views.Membersingleview,name="Membersingleview"),
     path("MemberSingleProfile",views.MemberSingleProfile,name="MemberSingleProfile"),
     path("Registration_confirmation/<int:pk>",views.Registration_confirmation,name="Registration_confirmation"),
-    path("delete_gallery/<int:pk>",views.delete_gallery,name="delete_gallery")
+    path("delete_gallery/<int:pk>",views.delete_gallery,name="delete_gallery"),
+    path("DESS_INFO",views.DESS_INFO,name="DESS_INFO"),
 
 ]

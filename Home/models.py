@@ -60,6 +60,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     DSES_idcard = models.BooleanField(default=False)
     blood = models.CharField(max_length=10, default="O+")
 
+    profile_pic = models.FileField(upload_to='profile_pic', null=True, blank=True)
+
 
     class Meta:
         verbose_name = 'user'
