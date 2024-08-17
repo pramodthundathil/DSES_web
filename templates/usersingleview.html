@@ -13,7 +13,22 @@
                 <table class="table table-striped">
                     <tr>
                         <td>Login Id</td>
-                        <th>{{member.id_number}}</th>
+                        
+                        <th>
+                        
+                            {{member.id_number}} 
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>Profile Pic</td>
+                        
+                        <th>
+                            {% if member.profile_pic.url is not None %}
+                            
+                            <img src="{{member.profile_pic.url}}" width="150px" alt=""><br>
+                            {% endif %}
+                            
+                        </th>
                     </tr>
                     <tr>
                         <td>First Name</td>

@@ -8,6 +8,11 @@ from .decotrator import admin_only, Access_Control
 from django.utils.crypto import get_random_string
 from django.contrib.auth.decorators import login_required
 
+from django.conf import settings
+from django.core.mail import send_mail,EmailMessage
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+
 import base64
 from django.core.files.base import ContentFile
 
@@ -84,7 +89,18 @@ def SignUp(request):
                 )
                 user.set_password(pswd)
                 user.save()
-                
+                try:
+                    email = email
+                    mail_subject = 'DSES Account was created'
+                    path = "SignUp"
+                    message = render_to_string('emailbody.html', {'user': user,
+                                                                      
+                                                                        })
+
+                    email = EmailMessage(mail_subject, message, to=[email])
+                    email.send(fail_silently=True)
+                except:
+                    pass
                 messages.success(request, "User registered successfully.")
                 return redirect('Registration_confirmation', pk = user.id)
         except ValidationError as e:
