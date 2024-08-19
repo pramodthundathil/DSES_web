@@ -1,0 +1,231 @@
+{% extends 'admin.html' %}
+{% load static %}
+{% block content %}
+<style>
+    #email-progress{
+        display: none;
+    }
+</style>
+<div class="container-fluid py-6">
+    <div class="container">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="h3 mb-3">Messaging</h1>
+            <p></p>
+        </div>
+
+        <link rel="stylesheet" href="{%static 'dashboard/css/dataTables.bootstrap4.css' %}">
+
+
+        <!-- <p class="card-text">DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, built upon the foundations of progressive enhancement, that adds all of these advanced features to any HTML table. </p> -->
+        <div class="row my-4">
+            <div class="col-12">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row align-items-center my-4">
+                        <div class="col">
+                            <!-- <h2 class="h3 mb-0 page-title">Contacts</h2> -->
+                            {% for message in messages %}
+                            <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                                <strong>Alart</strong> {{message}} <button type="button" class="close"
+                                    data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                            <!-- <div id="email-progress">
+                            <h6 class="text-info text-center"><div class="spinner-border text-info" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                              </div> Email Messages Sending Progress...</h6>
+                            </div> -->
+
+                            <button data-bs-toggle="modal" data-bs-target="#exampleModal"  class="btn btn-primary">Send Email</button>
+
+                            <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Email Body</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" name="sub_name" placeholder="Type Subject of mail" required>
+          <br>
+          <textarea  class="form-control" name="message" placeholder="Message" id=""></textarea>
+        </div>
+        <button type="submit" onclick="progress()" class="btn btn-primary">
+            <span id="email-progress">
+                <h6 class="text-info text-center"><div class="spinner-border text-info" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div> Email Messages Sending Progress...</h6>
+                </span>
+            <span id="button_span">Send Bulk Mail</sapn>
+        </button>
+      </div>
+    </div>
+  </div>
+
+                        </div>
+
+
+
+
+                        <div class="col-auto">
+
+
+
+
+                        </div>
+                    </div>
+                    <!-- Small table -->
+                    <div class="col-md-12">
+                        <div class="card shadow" style="overflow: auto;">
+                            <div class="card-body">
+                                <!-- table -->
+                                <table class="table table-striped datatables" id="dataTable-1">
+                                    <thead>
+                                        <tr>
+                                            <th><input id="select-all" type="checkbox" class="form-check-input"
+                                                    aria-checked="false"><i class="input-helper"></i></th>
+                                            <th>#
+                                            </th>
+                                            <th>Member </th>
+                                            <th>Id Number</th>
+                                            <th>Phone Number</th>
+                                            <th>Address</th>
+                                            <th>District</th>
+                                            <th>State</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in users %}
+                                        <tr>
+                                            <td><label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input contact-checkbox"
+                                                        value="{{item.id}}" name="contact_id" aria-checked="false"><i
+                                                        class="input-helper"></i></label></td>
+                                            <td>{{forloop.counter}}
+
+                                            </td>
+                                            <td>{{item.first_name}}</td>
+                                            <td>{{item.id_number}}</td>
+                                            <td>{{item.phone_number}}</td>
+                                            <td>{{item.address}}</td>
+                                            <td>{{item.district}}</td>
+                                            <td>{{item.state}}</td>
+                                            <td>
+                                                {%if item.is_active == True %}
+                                                <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                <span class="badge bg-warning">Inactive</span>
+
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{%url 'Membersingleview' item.id %}"
+                                                    class="btn btn-outline-dark btn-sm">View</a>
+
+                                                {%if item.is_active == True %}
+                                                <a href="{%url 'Disable_user' item.id %}"
+                                                    class="btn btn-outline-danger btn-sm">Disable</a>
+
+                                                {% else %}
+                                                <a href="{%url 'Disable_user' item.id %}"
+                                                    class="btn btn-outline-success btn-sm">Actvate</a>
+
+
+                                                {% endif %}
+                                                <!-- <button class="btn btn-sm dropdown-toggle more-horizontal" type="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="text-muted sr-only">Action</span>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#">Edit</a>
+                                                <a class="dropdown-item" href="#">Remove</a>
+                                                <a class="dropdown-item" href="#">Assign</a>
+                                            </div> -->
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> <!-- simple table -->
+            </div> <!-- end section -->
+        </div> <!-- .col-12 -->
+    </div> <!-- .row -->
+</div> <!-- .container-fluid -->
+</form>
+
+
+<script src="{%static 'dashboard/js/jquery.min.js' %}"></script>
+<script src="{%static 'dashboard/js/popper.min.js' %}' "></script>
+<script src="{%static 'dashboard/js/moment.min.js' %}"></script>
+<script src="{%static 'dashboard/js/bootstrap.min.js'%}"></script>
+<script src="{%static 'dashboard/js/simplebar.min.js' %}"></script>
+<script src="{%static 'dashboard/js/daterangepicker.js' %}"></script>
+<script src="{%static 'dashboard/js/jquery.stickOnScroll.js' %}"></script>
+<script src="{%static 'dashboard/js/tinycolor-min.js' %}"></script>
+<script src="{%static 'dashboard/js/config.js' %}"></script>
+
+<script src='{%static "dashboard/js/jquery.dataTables.min.js" %}'></script>
+<script src='{%static "dashboard/js/dataTables.bootstrap4.min.js" %}'></script>
+<script>
+    $('#dataTable-1').DataTable(
+        {
+            autoWidth: true,
+            "lengthMenu": [
+                [16, 32, 64, -1],
+                [16, 32, 64, "All"]
+            ]
+        });
+</script>
+
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-56159088-1');
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectAllCheckbox = document.getElementById('select-all');
+        const contactCheckboxes = document.querySelectorAll('.contact-checkbox');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            const isChecked = this.checked;
+            contactCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        contactCheckboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const allChecked = [...contactCheckboxes].every(function (checkbox) {
+                    return checkbox.checked;
+                });
+                selectAllCheckbox.checked = allChecked;
+            });
+        });
+    });
+</script>
+<script>
+    function progress(){
+        document.getElementById("button_span").style.display = "none"
+        document.getElementById("email-progress").style.display = "block"
+    }
+</script>
+
+
+
+
+{% endblock %}

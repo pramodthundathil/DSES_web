@@ -45,6 +45,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name='active')
     is_staff = models.BooleanField(default=False, verbose_name='staff status')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='date joined')
+    guardian = models.CharField(max_length=20, null=True, blank=True)
 
     id_card_type = models.CharField(max_length=20, choices=(("PAN CARD","PAN CARD"),("VOTER ID","VOTER ID"),("DRIVING LICENCE","DRIVING LICENCE")))
     id_card_number = models.CharField(max_length=20)

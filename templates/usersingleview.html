@@ -13,21 +13,33 @@
                 <table class="table table-striped">
                     <tr>
                         <td>Login Id</td>
-                        
+
                         <th>
-                        
-                            {{member.id_number}} 
+
+                            {{member.id_number}}
                         </th>
                     </tr>
                     <tr>
-                        <td>Profile Pic</td>
+                        <td>Active status</td>
+                        <th>
+                            {%if item.is_active == True %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-warning">Inactive</span>
+
+                            {% endif %}
+                        </th>
                         
+                    </tr>
+                    <tr>
+                        <td>Profile Pic</td>
+
                         <th>
                             {% if member.profile_pic.url is not None %}
-                            
+
                             <img src="{{member.profile_pic.url}}" width="150px" alt=""><br>
                             {% endif %}
-                            
+
                         </th>
                     </tr>
                     <tr>
@@ -87,6 +99,8 @@
                         <th>
                             {% if member.DSES_idcard == False %}
                             <span class="badge bg-warning">Id card not issued </span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-outline-primary btn-sm" href="{%url 'IssueIdCard' member.id %}">Issue ID</a>
                             {% else %}
                             <span class="badge bg-success">Id card issued </span>
 

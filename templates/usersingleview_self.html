@@ -15,6 +15,21 @@
                         <td>Login Id</td>
                         <th>{{member.id_number}}</th>
                     </tr>
+                    <tr>
+                        <td>Active status</td>
+                        <th>
+                            {%if member.is_active == True %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-warning">Inactive</span>
+
+                            {% endif %}
+                        </th>
+                        
+                    </tr>
+                    <tr>
+
+                    <td>Photo</td>
                     <th>
                         {% if member.profile_pic.url is not None %}
                         
@@ -22,6 +37,7 @@
                         {% endif %}
                         
                     </th>
+                </tr>
                     <tr>
                         <td>First Name</td>
                         <th>{{member.first_name}}</th>

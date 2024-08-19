@@ -55,6 +55,13 @@
                                 <label for="email">Date of Birth</label>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="guardian" required id="lname"
+                                    placeholder="Last name">
+                                <label for="email">Father/ Mother/ Spouse </label>
+                            </div>
+                        </div>
                         
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -124,7 +131,7 @@
                                 <input type="hidden" required class="form-control" name="profile_pic" id="profilePic" accept="image/*">
                                 <!-- <label for="profilePic">Upload Profile Picture</label> -->
                                 <div>
-                                    <button type="button" id="uploadButton" class="btn btn-primary mb-3">Upload Profile Picture</button>
+                                    <button type="button" id="uploadButton" class="btn btn-primary mb-3">Take Profile Picture</button>
                                     <video id="video" width="320" height="240" autoplay style="display:none;"></video><br>
                                     <button id="capture" style="display:none;" class="btn btn-success mb-3">Capture Photo</button>
                                     <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>

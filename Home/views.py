@@ -32,6 +32,7 @@ def SignUp(request):
         fname = request.POST.get('fname')
         lname = request.POST.get('lname')
         dob = request.POST.get('dob')
+        guardian = request.POST.get("guardian")
         village = request.POST.get('village')
         district = request.POST.get('district')
         state = request.POST.get('state')
@@ -73,6 +74,7 @@ def SignUp(request):
                     id_number=generate_unique_id_number(),
                     first_name=fname,
                     last_name=lname,
+                    guardian = guardian,
                     date_of_birth=dob,
                     village=village,
                     district=district,
@@ -152,7 +154,13 @@ def Gallery(request):
 @Access_Control
 @login_required(login_url='SignIn')
 def AdminIndex(request):
-    return render(request,"admin.html")
+    user_num = CustomUser.objects.all().count()
+    gallery_num = GalleryImages.objects.all().count()
+    context = {
+        "user_num":user_num,
+        "gallery_num":gallery_num
+    }
+    return render(request,"admin.html",context)
 
 @Access_Control
 @login_required(login_url='SignIn')
@@ -185,7 +193,43 @@ def delete_gallery(request,pk):
     gallery = GalleryImages.objects.get(id = pk)
     gallery.image.delete()
     gallery.delete()
+    
     return redirect("Gallery_admin")
+
+@Access_Control
+@login_required(login_url='SignIn')
+def Disable_user(request,pk):
+    user = CustomUser.objects.get(id = pk)
+    if user.is_active == False:
+        user.is_active = True
+        user.save()
+        messages.success(request,"User Activated")
+    else:
+        user.is_active = False
+        user.save()
+        messages.success(request,"User Disabled")
+
+    return redirect("Users")
+
+
+@Access_Control
+@login_required(login_url='SignIn')
+def IssueIdCard(request,pk):
+    return redirect("Membersingleview", pk = pk)
+
+def Active_members_list(request):
+    users = CustomUser.objects.filter(is_active = True)
+    context = {
+        "users":users
+    }
+    return render(request,"list_of_activeusers.html",context)
+
+def Inctive_members_list(request):
+    users = CustomUser.objects.filter(is_active = False)
+    context = {
+        "users":users
+    }
+    return render(request,"list_of_inaciveusers.html",context)
 
 @Access_Control
 @login_required(login_url='SignIn')
@@ -208,3 +252,36 @@ def MemberSingleProfile(request):
 @login_required(login_url='SignIn')
 def DESS_INFO(request):
     return render(request,'dess_details.html')
+
+
+def Messageing(request):
+    users = CustomUser.objects.all()
+    if request.method =="POST":
+        selected_contacts = request.POST.getlist('contact_id')
+        subjuct = request.POST.get("sub_name")
+        message = request.POST.get("message")
+        print(selected_contacts, subjuct, message)
+        email = []
+        for item in selected_contacts:
+            member = CustomUser.objects.get(id = int(item))
+            email.append(member.email)
+
+        try:
+            email = email
+            mail_subject = subjuct
+            message = render_to_string('emailbody_message.html', {'message': message,
+                                                            "user": member,
+                                                            "subjuct":subjuct
+                                                                
+                                                                })
+
+            email = EmailMessage(mail_subject, message, to=email)
+            email.send(fail_silently=True)
+        except:
+            pass
+
+        return redirect("Messageing")
+    context = {
+        "users":users
+    }
+    return render(request,"messageing.html",context)
